@@ -26,8 +26,8 @@ from Sorting import shellsort as sort
 from DataStructures import listiterator as it
 from ADT import list as slt
 
-list_type = 'ARRAY_LIST'
-#list_type = 'SINGLE_LINKED'
+#list_type = 'ARRAY_LIST'
+list_type = 'SINGLE_LINKED'
 
 
 book1 = {'book_id': '1', 'book_title': 'Title 1', 'author': 'author 1'}
@@ -224,8 +224,8 @@ def test_ManyElements():
     assert slt.removeFirst(lst) == book10
     assert slt.removeFirst(lst) != book14
     # variantes
-    #assert slt.removeFirst(lst)["book_id"] == book10["book_id"]
-    #assert slt.removeFirst(lst)["book_id"] == book14["book_id"]
+    # assert slt.removeFirst(lst)["book_id"] == book10["book_id"]
+    # assert slt.removeFirst(lst)["book_id"] == book14["book_id"]
 
 
 def test_agregarYquitar():

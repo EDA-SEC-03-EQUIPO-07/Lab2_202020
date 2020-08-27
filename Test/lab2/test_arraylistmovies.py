@@ -1,50 +1,22 @@
-"""
- * Copyright 2020, Departamento de sistemas y Computación, Universidad de Los Andes
- * 
- * Desarrollado para el curso ISIS1225 - Estructuras de Datos y Algoritmos
- *
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- """
 
+
+import pytest
 import config
 from Utils import error as error
-from DataStructures import liststructure as lt
-
-
-"""
-  Este módulo implementa el tipo abstracto de datos (TAD) lista. 
-  Se puede implementar sobre una estructura de datos encadenada de forma sencilla o doble o 
-  como un arreglo
-"""
-
-
-def newList(datastructure='ARRAY_LIST', cmpfunction=None):
+def newList (cmpfunction=None):
     """Crea una lista vacia.
 
     Args:
         cmpfunction: Función de comparación para los elementos de la lista
     Returns:
-        Una nueva lista
+        Un diccionario que representa la estructura de datos de una lista
+
     Raises:
-        Exception
+
     """
-    try:
-        lst = lt.newList(datastructure, cmpfunction)
-        return lst
-    except Exception as exp:
-        error.reraise(exp, 'TADList->newList: ')
+    new_list = {'elements': [], 'size': 0,
+                'type': 'ARRAY_LIST', 'cmpfunction': cmpfunction}
+    return (new_list)
 
 
 def addFirst(lst, element):
@@ -64,9 +36,10 @@ def addFirst(lst, element):
         Exception
     """
     try:
-        lt.addFirst(lst, element)
+        lst['elements'].insert(0, element)
+        lst['size'] += 1
     except Exception as exp:
-        error.reraise(exp, 'TADList->addFirst: ')
+        error.reraise(exp, 'arraylist->addFirst: ')
 
 
 def addLast(lst, element):
@@ -83,9 +56,10 @@ def addLast(lst, element):
         Exception
     """
     try:
-        lt.addLast(lst, element)
+        lst['elements'].append(element)
+        lst['size'] += 1
     except Exception as exp:
-        error.reraise(exp, 'TADList->addLast: ')
+        error.reraise(exp, 'arraylist->addLast: ')
 
 
 def isEmpty(lst):
@@ -98,9 +72,9 @@ def isEmpty(lst):
         Exception
     """
     try:
-        return lt.isEmpty(lst)
+        return lst['size'] == 0
     except Exception as exp:
-        error.reraise(exp, 'TADList->isEmpty: ')
+        error.reraise(exp, 'arraylist->isEmpty: ')
 
 
 def size(lst):
@@ -113,9 +87,9 @@ def size(lst):
         Exception
     """
     try:
-        return lt.size(lst)
+        return lst['size']
     except Exception as exp:
-        error.reraise(exp, 'TADList->size: ')
+        error.reraise(exp, 'arraylist->size: ')
 
 
 def firstElement(lst):
@@ -128,9 +102,9 @@ def firstElement(lst):
         Exception
     """
     try:
-        return lt.firstElement(lst)
+        return lst['elements'][0]
     except Exception as exp:
-        error.reraise(exp, 'TADList->firstElement: ')
+        error.reraise(exp, 'arraylist->firstElement: ')
 
 
 def lastElement(lst):
@@ -143,9 +117,9 @@ def lastElement(lst):
         Exception
     """
     try:
-        return lt.lastElement(lst)
+        return lst['elements'][lst['size']-1]
     except Exception as exp:
-        error.reraise(exp, 'TADList->LastElement: ')
+        error.reraise(exp, 'arraylist->lastElement: ')
 
 
 def getElement(lst, pos):
@@ -162,9 +136,9 @@ def getElement(lst, pos):
         Exception
     """
     try:
-        return lt.getElement(lst, pos)
+        return lst['elements'][pos-1]
     except Exception as exp:
-        error.reraise(exp, 'List->getElement: ')
+        error.reraise(exp, 'arraylist->getElement: ')
 
 
 def deleteElement(lst, pos):
@@ -181,9 +155,10 @@ def deleteElement(lst, pos):
         Exception
     """
     try:
-        lt.deleteElement(lst, pos)
+        lst['elements'].pop(pos-1)
+        lst['size'] -= 1
     except Exception as exp:
-        error.reraise(exp, 'TADList->deleteElement: ')
+        error.reraise(exp, 'arraylist->deleteElement: ')
 
 
 def removeFirst(lst):
@@ -195,15 +170,15 @@ def removeFirst(lst):
     Args:
         lst: La lista a examinar
 
-    Returns:
-        El primer elemento de la lista
     Raises:
         Exception
     """
     try:
-        return lt.removeFirst(lst)
+        element = lst['elements'].pop(0)
+        lst['size'] -= 1
+        return element
     except Exception as exp:
-        error.reraise(exp, 'TADList->removeFirst: ')
+        error.reraise(exp, 'arraylist->removeFirst: ')
 
 
 def removeLast(lst):
@@ -215,15 +190,15 @@ def removeLast(lst):
     Args:
         lst: La lista a examinar
 
-    Returns:
-        El ultimo elemento de la lista
     Raises:
         Exception
     """
     try:
-        return lt.removeLast(lst)
+        element = lst['elements'].pop(lst['size']-1)
+        lst['size'] -= 1
+        return element
     except Exception as exp:
-        error.reraise(exp, 'TADList->removeLast: ')
+        error.reraise(exp, 'arraylist->remoLast: ')
 
 
 def insertElement(lst, element, pos):
@@ -240,9 +215,10 @@ def insertElement(lst, element, pos):
         Exception
     """
     try:
-        lt.insertElement(lst, element, pos)
+        lst['elements'].insert(pos-1, element)
+        lst['size'] += 1
     except Exception as exp:
-        error.reraise(exp, 'TADList->insertElement: ')
+        error.reraise(exp, 'arraylist->insertElement: ')
 
 
 def isPresent(lst, element):
@@ -250,20 +226,45 @@ def isPresent(lst, element):
 
     Informa si un elemento está en la lista.  Si esta presente, retorna la posición en la que se encuentra 
     o cero (0) si no esta presente. Se utiliza la función de comparación utilizada durante la creación 
-    de la lista para comparar los elementos.
+    de la lista para comparar los elementos, la cual debe retornan cero si los elementos son iguales.
 
     Args:
         lst: La lista a examinar
         element: El elemento a buscar
-    Returns:     
 
     Raises:
         Exception
     """
     try:
-        return lt.isPresent(lst, element)
+        size = lst['size']
+        if size > 0:
+            keyexist = False
+            for keypos in range(1, size+1):
+                if (lst['cmpfunction'](element, lst['elements'][keypos-1]) == 0):
+                    keyexist = True
+                    break
+            if keyexist:
+                return keypos
+        return 0
     except Exception as exp:
-        error.reraise(exp, 'TADList->isPresent: ')
+        error.reraise(exp, 'arraylist->isPresent: ')
+
+
+def changeInfo(lst, pos, newinfo):
+    """ Cambia la informacion contenida en el nodo de la lista que se encuentra en la posicion pos.
+
+    Args:   
+        lst: La lista a examinar
+        pos: la posición de la lista con la información a cambiar
+        newinfo: La nueva información que se debe poner en el nodo de la posición pos
+
+    Raises:
+        Exception
+    """
+    try:
+        lst['elements'][pos-1] = newinfo
+    except Exception as exp:
+        error.reraise(exp, 'arraylist->changeInfo: ')
 
 
 def exchange(lst, pos1, pos2):
@@ -278,26 +279,13 @@ def exchange(lst, pos1, pos2):
         Exception
     """
     try:
-        lt.exchange(lst, pos1, pos2)
+        infopos1 = getElement(lst, pos1)
+        infopos2 = getElement(lst, pos2)
+        changeInfo(lst, pos1, infopos2)
+        changeInfo(lst, pos2, infopos1)
+        return lst
     except Exception as exp:
-        error.reraise(exp, 'List->exchange: ')
-
-
-def changeInfo(lst, pos, element):
-    """ Cambia la informacion contenida en el nodo de la lista que se encuentra en la posicion pos.
-
-    Args:   
-        lst: La lista a examinar
-        pos: la posición de la lista con la información a cambiar
-        newinfo: La nueva información que se debe poner en el nodo de la posición pos
-
-    Raises:
-        Exception
-    """
-    try:
-        lt.changeInfo(lst, pos, element)
-    except Exception as exp:
-        error.reraise(exp, 'List->changeInfo: ')
+        error.reraise(exp, 'arraylist->exchange: ')
 
 
 def subList(lst, pos, numelem):
@@ -315,6 +303,15 @@ def subList(lst, pos, numelem):
         Exception
     """
     try:
-        return lt.subList(lst, pos, numelem)
+        sublst = {'elements': [], 'size': 0, 'type': 'ARRAY_LIST',
+                  'cmpfunction': lst['cmpfunction']}
+        elem = pos-1
+        cont = 1
+        while cont <= numelem:
+            sublst['elements'].append(lst['elements'][elem])
+            sublst['size'] += 1
+            elem += 1
+            cont += 1
+        return sublst
     except Exception as exp:
-        error.reraise(exp, 'List->subList: ')
+        error.reraise(exp, 'arraylist->subList: ')

@@ -22,13 +22,13 @@
 
 import pytest
 import config as cf
-from Sorting import shellsort as sort
+from Sorting import selectionsort as sort
 from DataStructures import listiterator as it
 from ADT import list as lt
 import csv
 
-list_type = 'ARRAY_LIST'
-#list_type = 'SINGLE_LINKED'
+#list_type = 'ARRAY_LIST'
+list_type = 'SINGLE_LINKED'
 
 lst_books = lt.newList(list_type)
 booksfile = cf.data_dir + 'GoodReads/books.csv'
@@ -58,7 +58,7 @@ def printList(lst):
 
 
 def less(element1, element2):
-    if int(element1['goodreads_book_id']) < int(element2['goodreads_book_id']):
+    if int(element1['id']) < int(element2['id']):
         return True
     return False
 
@@ -68,7 +68,7 @@ def test_sort():
     Lista con elementos en orden aleatorio
     """
     print("sorting ....")
-    sort.shellSort(lst_books, less)
+    sort.selectionSort(lst_books, less)
 
 
 def test_loading_CSV_y_ordenamiento():
@@ -76,7 +76,7 @@ def test_loading_CSV_y_ordenamiento():
     Prueba que se pueda leer el archivo y que despues de relizar el sort, el orden este correcto
     """
     setUp()
-    sort.shellSort(lst_books, less)
+    sort.selectionSort(lst_books, less)
     while not (lt.isEmpty(lst_books)):
         x = int(lt.removeLast(lst_books)['goodreads_book_id'])
         if not (lt.isEmpty(lst_books)):
